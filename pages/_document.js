@@ -7,6 +7,7 @@ class MyDocument extends Document {
       <Html>
         <Head>
           <link rel="shortcut icon" href="/static/favicon.ico" />
+          <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,500,700"/>
         </Head>
         <body>
           {/* Custom App-level wrapper */}
