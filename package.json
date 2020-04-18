@@ -4,7 +4,9 @@
   "description": "Customized views of 'Warcraft Logs' reports",
   "main": "index.js",
   "scripts": {
-    "start": "next",
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
