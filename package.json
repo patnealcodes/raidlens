@@ -1,0 +1,32 @@
+{
+  "name": "raidlens",
+  "version": "0.0.1",
+  "description": "Customized views of 'Warcraft Logs' reports",
+  "main": "index.js",
+  "scripts": {
+    "start": "next",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/patnealcodes/raidlens.git"
+  },
+  "keywords": [
+    "warcraft",
+    "logs",
+    "raid",
+    "analytics"
+  ],
+  "author": "Patrick Neal",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/patnealcodes/raidlens/issues"
+  },
+  "homepage": "https://github.com/patnealcodes/raidlens#readme",
+  "dependencies": {
+    "fontfaceobserver": "^2.1.0",
+    "next": "^9.3.5",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  }
+}
