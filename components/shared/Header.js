@@ -3,17 +3,17 @@ import Logo from './Logo';
 export default function HeaderComponent () {
   return (
     <div>
-      <header>
+      <header className="raidlens-header">
         <div className="home-link">
           <div className="logo">
             <Logo fill="white" maxHeight="22px" />
           </div>
-          <span style={{ marginLeft: '1em' }}>RaidLens</span>
+          <span className="raidlens-title">RaidLens</span>
         </div>
       </header>
 
       <style jsx>{`
-        header {
+        .raidlens-header {
           background: rgba(0,0,0,.2);
           display: flex;
           justify-content: space-between;
@@ -23,6 +23,10 @@ export default function HeaderComponent () {
         .home-link {
           display: flex;
           cursor: pointer;
+        }
+
+        .raidlens-title {
+          margin: 0 0 0 1em;
         }
 
         @media (prefers-reduced-motion: no-preference) {

@@ -1,5 +1,4 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document'
-import AppWrapper from '../Layouts/AppWrapper'
 
 class MyDocument extends Document {
   render() {
@@ -10,11 +9,7 @@ class MyDocument extends Document {
           <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,500,700"/>
         </Head>
         <body>
-          {/* Custom App-level wrapper */}
-          <AppWrapper>
-            <Main />
-          </AppWrapper>
-
+          <Main />
           <NextScript />
         </body>
       </Html>
