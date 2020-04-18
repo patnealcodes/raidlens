@@ -5,13 +5,13 @@ export default ({ children }) => (
     <Header />
     {children}
     
-    <style jsx>{`
-      :global(body) {
+    <style jsx global>{`
+      body {
         background-color: #282c34;
         font-family: Roboto;
         margin: 0;
       }
-      :global(body, a) {
+      body, a {
         color: white;
       }
     `}</style>
