@@ -3,11 +3,12 @@ import axios from 'axios';
 import PageWrapper from "../layouts/PageWrapper";
 import RaidBlock from "../components/RaidBlock";
 
-function RaidsPage ({ raids, error }) {
+function RaidsPage ({ query, raids, error }) {
   function renderRaids() {
     return (
       <ul className="raid-list">
         {raids.map(r => {
+          // Only render raids with a zone ID other than '-1'
           return r.zone !== -1 && (
             <div className="raid" key={r.id}>
               <RaidBlock
@@ -46,23 +47,25 @@ function RaidsPage ({ raids, error }) {
 }
 
 RaidsPage.getInitialProps = async function({ query }) {
-  const { version, guild, server, region } = query;
-  const { WARCRAFT_LOGS_KEY } = process.env;
+  // Hard code to classic until I build out support for retail
+  const { version = 'classic', guild, server, region } = query;
+
   const urlPrefix = version === 'classic' ? 'classic' : 'www';
 
-  const URL = `https://${ urlPrefix }.warcraftlogs.com:443/v1/reports/guild/${guild}/${server}/${region}?api_key=${WARCRAFT_LOGS_KEY}`;
+  const URL = `https://${ urlPrefix }.warcraftlogs.com:443/v1/reports/guild/${guild}/${server}/${region}?api_key=${process.env.WARCRAFT_LOGS_KEY}`;
 
-  if( !WARCRAFT_LOGS_KEY ) {
+  if( !process.env.WARCRAFT_LOGS_KEY ) {
     return { error: 'Missing / invalid API key' }
   }
 
   try {
     const { data: raids } = await axios.get( URL );
 
-    return { raids }
+    return { query, raids }
   } catch(e) {
-    console.error('Error fetching raids:', e);
-    return { error: 'Error fetching raids' }
+    const errorMessage = `Error fetching raids for ${guild} on ${server}`
+    console.error(errorMessage, e);
+    return { error: errorMessage }
   }
 }
 
