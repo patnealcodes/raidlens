@@ -1,15 +1,18 @@
 import Logo from './Logo';
+import Link from 'next/link'
 
 export default function HeaderComponent () {
   return (
     <div>
       <header className="raidlens-header">
-        <div className="home-link">
-          <div className="logo">
-            <Logo fill="white" maxHeight="22px" />
-          </div>
-          <span className="raidlens-title">RaidLens</span>
-        </div>
+        <Link href="/">
+          <a className="home-link" >
+            <div className="logo">
+              <Logo fill="white" maxHeight="22px" />
+            </div>
+            <span className="raidlens-title">RaidLens</span>
+          </a>
+        </Link>
       </header>
 
       <style jsx>{`
@@ -22,7 +25,7 @@ export default function HeaderComponent () {
 
         .home-link {
           display: flex;
-          cursor: pointer;
+          text-decoration: none;
         }
 
         .raidlens-title {

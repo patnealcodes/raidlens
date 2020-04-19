@@ -9,8 +9,8 @@ export default function DashboardPage () {
         <h1>Dashboard</h1>
 
         {/* TEMP */}
-        <Link href="/attendance">
-          <a>Link to attendance page...</a>
+        <Link href="/raids?version=classic&guild=vp&server=herod&region=us">
+          <a>TEMP link to VP raids...</a>
         </Link>
         {/* TEMP */}
       </section>
