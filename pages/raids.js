@@ -3,14 +3,7 @@ import axios from 'axios';
 import PageWrapper from "../layouts/PageWrapper";
 import RaidBlock from "../components/RaidBlock";
 
-function generateURL({ version, guild, server, region }) {
-  const { WARCRAFT_LOGS_KEY } = process.env;
-  const urlPrefix = version === 'classic' ? 'classic' : 'www';
-
-  return `https://${ urlPrefix }.warcraftlogs.com:443/v1/reports/guild/${guild}/${server}/${region}?api_key=${WARCRAFT_LOGS_KEY}`;
-}
-
-function RaidsPage ({ raids }) {
+function RaidsPage ({ raids, error }) {
   function renderRaids() {
     return (
       <ul className="raid-list">
@@ -46,26 +39,31 @@ function RaidsPage ({ raids }) {
       <section className="raids">
         <h1>Raids</h1>
 
-        {raids.length ? renderRaids() : 'ERROR: Unable to retrieve raids'}
+        {error ? error : renderRaids()}
       </section>
     </PageWrapper>
   )
 }
 
 RaidsPage.getInitialProps = async function({ query }) {
-  const queryURL = generateURL(query);
+  const { version, guild, server, region } = query;
+  const { WARCRAFT_LOGS_KEY } = process.env;
+  const urlPrefix = version === 'classic' ? 'classic' : 'www';
 
-  let raids;
+  const URL = `https://${ urlPrefix }.warcraftlogs.com:443/v1/reports/guild/${guild}/${server}/${region}?api_key=${WARCRAFT_LOGS_KEY}`;
 
-  try {
-    const { data } = await axios.get( queryURL );
-    raids = data;
-  } catch(e) {
-    console.error('Error fetching raids:', e);
-    raids = [];
+  if( !WARCRAFT_LOGS_KEY ) {
+    return { error: 'Missing / invalid API key' }
   }
 
-  return { raids }
+  try {
+    const { data: raids } = await axios.get( URL );
+
+    return { raids }
+  } catch(e) {
+    console.error('Error fetching raids:', e);
+    return { error: 'Error fetching raids' }
+  }
 }
 
 export default RaidsPage;
