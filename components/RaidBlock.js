@@ -9,7 +9,7 @@ export default function RaidBlock({ id, title, date, zoneId }) {
 
   return (
     <div>
-      <Link href={`/attendance/${id}`}>
+      <Link href={`/attendance/${id}`} prefetch={false}>
         <a className="raid-block" title={title} style={{ backgroundImage: `url(${zoneURL})` }}>
           <p className="raid-title">{title}</p>
           <div className="raid-content">
