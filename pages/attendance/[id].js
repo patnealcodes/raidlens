@@ -2,9 +2,9 @@ import axios from 'axios';
 
 import PageWrapper from "../../layouts/PageWrapper";
 
-function AttendancePage ({ friendlies, bossFights, error }) {
+function AttendancePage ({ raiders, bossFights, error }) {
   function renderData() {
-    const activeFriendlies = friendlies.map(fr => {
+    const activeRaiders = raiders.map(fr => {
       const bossKills = fr.fights.filter(f => bossFights.find(bf => bf.id === f.id));
 
       if( bossKills.length ) {
@@ -19,21 +19,48 @@ function AttendancePage ({ friendlies, bossFights, error }) {
           {bossFights.length && bossFights.map(f => <li>{f.name}</li>)}
         </ul>
 
-        <h2>Active Friendlies: {activeFriendlies.length}</h2>
-        <ul>
-          {activeFriendlies.map(af => <li><span className={af.class}>{af.name}</span> - {(af.bossKills.length / bossFights.length) * 100}%</li>)}
-        </ul>
+        <h2>Active Raiders: {activeRaiders.length}</h2>
+        <table className="raider-table">
+          <thead>
+            <td>Name</td>
+            <td>Bosses</td>
+            <td>Percent</td>
+          </thead>
+          <tbody>
+            {activeRaiders.map(af => {
+              const attendancePct = af.bossKills.length / bossFights.length;
+              let percentColorClass;
+
+              if (attendancePct === 1)
+                percentColorClass = 'artifact';
+              else if (attendancePct >= .9)
+                percentColorClass = 'astounding';
+              else if (attendancePct >= .8)
+                percentColorClass = 'legendary';
+              else if (attendancePct >= .7)
+                percentColorClass = 'epic';
+              else if (attendancePct >= .5)
+                percentColorClass = 'rare';
+              else if (attendancePct >= .3)
+                percentColorClass = 'uncommon';
+              else
+                percentColorClass = 'shit';
+              
+              return (
+                <tr>
+                  <td className={af.class}>{af.name}</td>
+                  <td className={percentColorClass}>{af.bossKills.length} / {bossFights.length}</td>
+                  <td className={percentColorClass}>{Math.round(attendancePct * 100)}%</td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
 
         <style jsx>{`
-          .druid { color:rgb(100%,49%,4%) }
-          .hunter { color:rgb(67%,83%,45%) }
-          .mage { color:rgb(41%,80%,94%) }
-          .paladin { color:rgb(96%,55%,73%) }
-          .priest { color:rgb(100%,100%,100%) }
-          .rogue { color:rgb(100%,96%,41%) }
-          .shaman { color:rgb(14%,35%,100%) }
-          .warlock { color:rgb(58%,51%,79%) }
-          .warrior { color:rgb(78%,61%,43%) }
+          .raider-table {
+            border-spacing: 10px 5px;
+          }
         `}</style>
       </div>
     )
@@ -50,7 +77,7 @@ function AttendancePage ({ friendlies, bossFights, error }) {
   )
 }
 
-AttendancePage.getInitialProps = async ({ query }) => {
+export const getServerSideProps = async ({ query }) => { // Switch to getStaticProps / getServerProps
   //https://classic.warcraftlogs.com:443/v1/report/fights/wxh39Y2HpadkJVZB?api_key=1dfb9e9d555b9ea68c7ef280d18936e3
 
   const URL = `https://classic.warcraftlogs.com:443/v1/report/fights/${query.id}?api_key=${process.env.WARCRAFT_LOGS_KEY}`;
@@ -62,10 +89,14 @@ AttendancePage.getInitialProps = async ({ query }) => {
   try {
     const { data } = await axios.get( URL );
 
-    const friendlies = data.friendlies.filter(f => f.type !== 'Unknown' && f.type !== 'Pet' && f.type !== 'NPC');
+    const raiders = data.friendlies.filter(f => f.type !== 'Unknown' && f.type !== 'Pet' && f.type !== 'NPC');
     const bossFights = data.fights.filter(f => f.kill);
 
-    return { friendlies, bossFights }
+    return {
+      props: {
+        raiders, bossFights
+      }
+    }
   } catch(e) {
     const errorMessage = `Error fetching report for id ${query.id}`
     console.error(errorMessage, e);
