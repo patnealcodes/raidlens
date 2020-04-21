@@ -17,7 +17,6 @@ export default function HeaderComponent () {
 
       <style jsx>{`
         .raidlens-header {
-          background: rgba(0,0,0,.2);
           display: flex;
           justify-content: space-between;
           padding: .75em;
